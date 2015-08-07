@@ -46,21 +46,39 @@
         #Submit1
         {}
     </style>
-   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+$(document).ready(function(){
+    $("div").change(function(){
+        alert("pham ngoc hieu");
+    });
+});
+</script>
 </head>
 <body style="height: 437px; width: 663px" onload="chance()">
      <div id="map" style="width:500px;height:380px;"></div>
      <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false">
  </script> 
+<script>
+    function processString(string)
+        {       
+            var x = string.split("*");
+            return x;
+        }
+    function showMap()
+    {
+        alert(document.getElementById("txtHint").value);
+    }
+</script>
  <%-- đây là đoạn mã phần ajax để thực hiện công việc khi nhận được số điện thoại đầu vào --%>
- <script>
+ <script>    
 function showCustomer()
 {
 var str = document.getElementById("Text1").value;
 var xmlhttp;
 if (str=="")
   {
-  document.getElementById("txtHint").innerHTML="chưa có số điện thoại gọi đến";
+  document.getElementById("txtHint").value="";
   return false;
   }
 if (window.XMLHttpRequest)
@@ -75,19 +93,48 @@ xmlhttp.onreadystatechange=function()
   {
   if (xmlhttp.readyState==4 && xmlhttp.status==200)
     {
-    document.getElementById("txtHint").innerHTML=xmlhttp.responseText;
+    document.getElementById("txtHint").value=xmlhttp.responseText;
     }
   }
 xmlhttp.open("GET","../getcustomer?q="+str,true);
 xmlhttp.send();
-
 return false;
-showArrayAdress();
+}
+</script> 
+<script>
+    function showCustomer2()
+{
+var str = document.getElementById("Text1").value;
+var xmlhttp;
+if (str=="")
+  {
+  document.getElementById("target").innerHTML="chưa có số điện thoại gọi đến";
+  return false;
+  }
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("target").innerHTML=xmlhttp.responseText;
+    }
+  }
+xmlhttp.open("GET","../getcustomer2?q="+str,true);
+xmlhttp.send();
+return false;
 }
 </script>
 
 <%-- đây là đoạn mã java script để hiện thị bản đồ google map --%>
  <script type="text/javascript">
+  var locations;
   var delay = 100;
   var infowindow = new google.maps.InfoWindow();
   var latlng = new google.maps.LatLng(21.0000, 78.0000);
@@ -99,7 +146,12 @@ showArrayAdress();
   var geocoder = new google.maps.Geocoder(); 
   var map = new google.maps.Map(document.getElementById("map"), mapOptions);
   var bounds = new google.maps.LatLngBounds();
-
+  function setAdress()
+  {
+      var x = document.getElementById("txtHint").value;
+      locations = processString(x);
+      theNext();
+  }
   function geocodeAddress(address, next) {
     geocoder.geocode({address:address}, function (results,status)
       { 
@@ -135,10 +187,7 @@ showArrayAdress();
    bounds.extend(marker.position);
 
  }
-  var locations = [
-       'dong da,Ha Noi',
-       'truong chinh, ha noi'
-  ];  
+    
   var nextAddress = 0;
   function theNext() {
     if (nextAddress < locations.length) {
@@ -149,30 +198,14 @@ showArrayAdress();
     }
    
   }
-  function theNext2() {
-      locations.push(document.getElementById('inp').value);
-    if (nextAddress < locations.length) {
-      setTimeout('geocodeAddress("'+locations[nextAddress]+'",theNext)', delay);
-      nextAddress++;
-    } else {
-      map.fitBounds(bounds);
-    }
-  }
-  
-  
   theNext();
 
 </script>   
-<form action="" onsubmit="return showCustomer()">
-    <div class="style4">
-        DEMO PROJECT CRM</div>
-    
+<form action="" onsubmit="return showCustomer()"> 
     <table style="width:100%;">
         <tr>
             <td bgcolor="#FF9999" class="style3">
                 Phía Khách Hàng</td>
-            <td class="style2">
-                Phía Doanh Nghiệp</td>
         </tr>
         <tr>
             <td bgcolor="#FF9999" class="style3">
@@ -185,17 +218,14 @@ showArrayAdress();
         </tr>
         <tr>
             <td bgcolor="#FF9999" class="style3">
-                <input id="Submit1" type="submit" value="Gọi cho tổng đài"  /></td>
-            
+                <input id="Submit1" type="submit" value="Gọi cho tổng đài" onclick="showCustomer2()"  /></td>           
         </tr>
         <tr>
-            <td class="style1" colspan="2">
-                đây là hệ thống mô phỏng, màu hồng phía khách hàng khi họ gọi tới tổng đài</td>
         </tr>       
     </table>
-        </form>
-   
-<p id="txtHint"> </p>
+        </form>  
 
+<input type="text" id="txtHint" value="">
+<div id="target"> </div>
 </body>
 </html>

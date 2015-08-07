@@ -9,6 +9,10 @@
         <servlet-class>model.getcustomer</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>getcustomer2</servlet-name>
+        <servlet-class>model.getcustomer2</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>getArrayAdress</servlet-name>
         <servlet-class>model.getArrayAdress</servlet-class>
     </servlet>
@@ -27,6 +31,10 @@
     <servlet-mapping>
         <servlet-name>getcustomer</servlet-name>
         <url-pattern>/getcustomer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>getcustomer2</servlet-name>
+        <url-pattern>/getcustomer2</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,0 +1,44 @@
+<html> 
+  <head> 
+    <title>Ajax at work</title> 
+ 
+    <script language="javascript">
+      
+ 
+      function getData(dataSource, divID) 
+      { 
+          var XMLHttpRequestObject = false; 
+ 
+      if (window.XMLHttpRequest) {
+        XMLHttpRequestObject = new XMLHttpRequest();
+      } else if (window.ActiveXObject) {
+        XMLHttpRequestObject = new ActiveXObject("Microsoft.XMLHTTP");
+      }
+        if(XMLHttpRequestObject) {
+          var obj = document.getElementById(divID); 
+          XMLHttpRequestObject.open("GET", dataSource); 
+ 
+          XMLHttpRequestObject.onreadystatechange = function() 
+          { 
+            if (XMLHttpRequestObject.readyState == 4 && 
+              XMLHttpRequestObject.status == 200) { 
+                obj.value = XMLHttpRequestObject.responseText; 
+            } 
+          } 
+          XMLHttpRequestObject.send(null); 
+        }
+      }
+    </script>
+  </head> 
+  <body>
+    <h1>Fetching data with Ajax & javaScript</h1>
+    <form>
+      <input type="button" value="Display Message" onclick = "getData('adress.txt', 'target')">     
+    </form>
+    <div id="targetDiv">
+      <p>The fetched data will go here.</p> 
+    </div> 
+    <input type="text" id="target" value="hieu">
+ 
+  </body> 
+</html>

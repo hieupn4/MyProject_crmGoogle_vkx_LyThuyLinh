@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package model;
+
 import Object.Employer;
 import conttroler.writeFile;
 import java.io.IOException;
@@ -22,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Administrator
  */
-public class getcustomer extends HttpServlet {
+public class getcustomer2 extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -70,27 +71,40 @@ public class getcustomer extends HttpServlet {
         try {
             con.connectDB();
         } catch (SQLException ex) {
-            Logger.getLogger(getcustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getcustomer2.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(getcustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getcustomer2.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             custo = con.selectCommand(sql);
            
         } catch (SQLException ex) {
-            Logger.getLogger(getcustomer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(getcustomer2.class.getName()).log(Level.SEVERE, null, ex);
         }
         PrintWriter out = response.getWriter();
         if(custo.size()==0)
         {
-            out.println("");
+            out.println("<p>has not record in DB</p>");
         }
         else
         {
-            String addre = "";          
+            
+           response.setContentType("text/html;charset=UTF-8");
+            out.println("<table border=\"1\">");
+            out.println("<tr><td>" + "Name" +"</td>"); 
+            out.println("<td>" + "Adress" +"</td>"); 
+            out.println("<td>" + "Crime "+"</td></tr>");
             for (int i=0;i<custo.size();i++)
-              addre = addre + ((Employer)custo.get(i)).getAdress()+"*";
-              out.println(addre);         
+            {
+            out.println("<tr><td>" + ((Employer)custo.get(i)).getName()+"</td>"); 
+            out.println("<td>" + ((Employer)custo.get(i)).getAdress()+"</td>"); 
+            out.println("<td>" + ((Employer)custo.get(i)).getCrime()+"</td></tr>"); 
+            }
+              out.println("</table>");
+              
+            
+             
+              
         }
         
 
