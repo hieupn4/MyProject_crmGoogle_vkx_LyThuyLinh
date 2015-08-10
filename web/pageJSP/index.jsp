@@ -47,11 +47,15 @@
         {}
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>
+        
+
+       </script>
     <script>
 $(document).ready(function(){
-    $("div").change(function(){
-        alert("pham ngoc hieu");
-    });
+    $('#txtHint').change(function(){
+          alert("hello world");
+});
 });
 </script>
 </head>
@@ -65,10 +69,6 @@ $(document).ready(function(){
             var x = string.split("*");
             return x;
         }
-    function showMap()
-    {
-        alert(document.getElementById("txtHint").value);
-    }
 </script>
  <%-- đây là đoạn mã phần ajax để thực hiện công việc khi nhận được số điện thoại đầu vào --%>
  <script>    
@@ -136,6 +136,7 @@ return false;
  <script type="text/javascript">
   var locations;
   var delay = 100;
+  var markers = [];
   var infowindow = new google.maps.InfoWindow();
   var latlng = new google.maps.LatLng(21.0000, 78.0000);
   var mapOptions = {
@@ -146,15 +147,11 @@ return false;
   var geocoder = new google.maps.Geocoder(); 
   var map = new google.maps.Map(document.getElementById("map"), mapOptions);
   var bounds = new google.maps.LatLngBounds();
-  function setAdress()
-  {
-      var x = document.getElementById("txtHint").value;
-      locations = processString(x);
-      theNext();
-  }
+  
   function geocodeAddress(address, next) {
     geocoder.geocode({address:address}, function (results,status)
       { 
+         //removeAllMaker();
          if (status == google.maps.GeocoderStatus.OK) {
           var p = results[0].geometry.location;
           var lat=p.lat();
@@ -178,6 +175,7 @@ return false;
      position: new google.maps.LatLng(lat,lng),
      map: map,
            });
+   
 
   google.maps.event.addListener(marker, 'click', function() {
      infowindow.setContent(contentString); 
@@ -185,7 +183,7 @@ return false;
    });
 
    bounds.extend(marker.position);
-
+   markers.push(marker);
  }
     
   var nextAddress = 0;
@@ -198,9 +196,39 @@ return false;
     }
    
   }
-  theNext();
+  function setAdress()
+  {
+      deleteMarkers();
+      nextAddress = 0;
+      locations =null;
+      var x = document.getElementById("txtHint").value;
+      locations = processString(x);  
+      theNext();
+  }
+  // Sets the map on all markers in the array.
+function setAllMap(map) {
+  for (var i = 0; i < markers.length; i++) {
+    markers[i].setMap(map);
+  }
+}
 
-</script>   
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setAllMap(null);
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setAllMap(map);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
+}
+  theNext();
+</script>  
 <form action="" onsubmit="return showCustomer()"> 
     <table style="width:100%;">
         <tr>
@@ -218,14 +246,15 @@ return false;
         </tr>
         <tr>
             <td bgcolor="#FF9999" class="style3">
-                <input id="Submit1" type="submit" value="Gọi cho tổng đài" onclick="showCustomer2()"  /></td>           
+                <input id="Submit1" type="submit" value="Gọi cho tổng đài" onclick="showCustomer2();"  /></td>           
         </tr>
         <tr>
         </tr>       
     </table>
         </form>  
 
-<input type="text" id="txtHint" value="">
+<input type="text" id="txtHint" hidden="true">
 <div id="target"> </div>
+<input type="button" value="Hiện Thị Vị Trí Trên Bản Đồ" onclick="setAdress();">
 </body>
 </html>

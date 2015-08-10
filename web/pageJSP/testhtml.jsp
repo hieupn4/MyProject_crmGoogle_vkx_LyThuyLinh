@@ -10,17 +10,16 @@
         <title></title> 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script>
-        function processString(string)
-        {       
-            var x = string.split("*");
-            alert(x[0]);
-            return x;
-        }
-        var con = processString("minh khai,ha noi*dong da,ha noi*");
-        alert(con[1]);
+        $('#anyDiv').change(function(){
+          alert("hello world");
+});
+
        </script>
     </head>
     <body>
     <input type="button" id="txtHint">
+    <div id="anyDiv">
+        <input type="text" value="hieu">
+    </div>
     </body>
     </html>
